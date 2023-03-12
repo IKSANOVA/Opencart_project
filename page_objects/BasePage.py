@@ -24,8 +24,9 @@ class BasePage:
     def _element(self, locator: tuple):
         try:
             return self._verify_element_presence(locator)
-        except TimeoutException:
-            allure.attach(self.driver.get_screenshot_as_png(), name="Screenshot", attachment_type=AttachmentType.PNG)
+        except TimeoutException as e:
+            allure.attach(body = self.driver.get_screenshot_as_png(), name="Screenshot", attachment_type=AttachmentType.PNG)
+            raise AssertionError(e.msg)
             self.logger.error(f"Element {locator} not found")
             raise AssertionError(f"Element {locator} can't be found")
 
